@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  
+  backend:
+    build:
+      context: ./src
+    volumes:
+      - ./src:/django
+    command: python manage.py runserver 0.0.0.0:8000 
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./src/.env
+    depends_on:
+      - redis
+
+  frontend:
+    build:
+      context: ./site
+    volumes:
+      - react_build:/react/build
+    command: npm run build
+
+  nginx:
+    build: 
+      context: ./nginx
+    ports:
+      - "80:8080"
+    volumes:
+      - react_build:/var/www/react
+    depends_on: 
+      - frontend
+      - backend
+      - redis
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"   
+
+  celery:
+    build: ./src
+    command: celery -A irlballers worker -l INFO
+    volumes:
+      - ./src:/django
+    env_file:
+      - ./src/.env
+    depends_on:
+      - backend
+      - redis
+
+  celery-beat:
+    build: ./src
+    command: celery -A irlballers beat -l INFO
+    volumes:
+      - ./src:/django
+    env_file:
+      - ./src/.env
+    depends_on:
+      - backend
+      - redis
+      - celery
+
+
+volumes:
+  django:
+  react_build:
+
+

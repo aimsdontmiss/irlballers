@@ -1,0 +1,49 @@
+.ticker {
+    width: 100%;
+    overflow: hidden;
+    background-color: orangered;
+    color: #fff;
+    white-space: nowrap;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .ticker__inner {
+    display: inline-flex;
+    animation: ticker 33s linear infinite;
+  }
+  
+  .ticker__item {
+    display: inline-block;
+    padding: 10px 20px;
+    border-right: 1px solid #ccc;
+  }
+  
+  .ticker__teams {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+
+  .ticker__msg {
+    font-weight: bold;
+    margin-right: 10px;
+    display: flex;
+  }
+  
+  .ticker__date {
+    margin-right: 10px;
+  }
+  
+  .ticker__score {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  @keyframes ticker {
+    from {
+      transform: translateX(50%);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  
